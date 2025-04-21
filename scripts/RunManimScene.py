@@ -2,9 +2,10 @@ import ast
 import os
 
 class RunManimScene:
-    def __init__(self, filename):
+    def __init__(self, filename, *, dirname='content', foldername='animations'):
         self.filename = filename
-        self.src_path = os.path.join('content', 'animations', filename)
+        self.base_path = os.path.join(dirname, foldername) if foldername else dirname
+        self.src_path = os.path.join(self.base_path, filename)
         self.scene_names = self._extract_classes()
 
     def _extract_classes(self):
@@ -33,7 +34,7 @@ class RunManimScene:
 
     def __iter__(self):
         for scene_name in self.scene_names:
-            yield lambda: self._run_scene(scene_name)
+            yield lambda s=scene_name: self._run_scene(s)
 
     def runtime(self, index, seconds):
         if index < 1 or index > len(self.scene_names):
