@@ -3,8 +3,9 @@ import os
 
 class RunManimScene:
     def __init__(self, filename, *, dirname='content', foldername='animations'):
+        path_parts = [p for p in (dirname, foldername) if p]  # Skip empty strings
         self.filename = filename
-        self.base_path = os.path.join(dirname, foldername) if foldername else dirname
+        self.base_path = os.path.join(*path_parts) if path_parts else '.'
         self.src_path = os.path.join(self.base_path, filename)
         self.scene_names = self._extract_classes()
 
